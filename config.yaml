@@ -1,0 +1,6 @@
+client_id: maxigauge-ce583f23-98c6-4353-84c8-e14f5830bbaf
+topic_base: "pressure"
+device_name: "MaxiGauge"
+mqtt_broker: "localhost"
+mqtt_port: 1883
+mqtt_connection_timeout: 60
