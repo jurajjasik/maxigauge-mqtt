@@ -78,6 +78,7 @@ class MaxiGaugeMQTTClient:
                 self.user_stop_event.wait(self.config["interval"])
         except Exception as e:
             logger.error(f"Error in main loop: {e}")
+            raise e
         finally:
             self.client.publish(
                 f"{self.topic_base}/{self.device_name}/status",
