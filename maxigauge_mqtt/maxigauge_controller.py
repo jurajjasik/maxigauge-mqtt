@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 class MaxigaugeController:
     ACK = "\x06"
     NAK = "\x15"
-    ENQ = "\x05"
+    ENQ = b"\x05"
 
     def __init__(self, address):
         self.address = address
