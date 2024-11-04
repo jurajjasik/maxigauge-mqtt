@@ -5,5 +5,5 @@ mqtt_broker: "localhost"
 mqtt_port: 1883
 mqtt_connection_timeout: 60
 
-maxigauge_address: "TCPIP::192.168.0.101::8000::SOCKET"
+maxigauge_address: "TCPIP::192.168.1.101::8000::SOCKET"
 interval: 1.0  # seconds
