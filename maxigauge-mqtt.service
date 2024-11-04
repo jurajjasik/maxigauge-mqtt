@@ -1,0 +1,12 @@
+[Unit]
+Description=maxigauge-mqtt Service
+After=multi-user.target
+
+[Service]
+Type=idle
+User=quad
+ExecStart=/usr/bin/python3 /home/maxigauge-mqtt/maxigauge_mqtt_main.py /home/maxigauge-mqtt/config.yaml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
