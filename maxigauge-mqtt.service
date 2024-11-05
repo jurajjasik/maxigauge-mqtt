@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=idle
 User=quad
-ExecStart=/usr/bin/python3 /home/maxigauge-mqtt/maxigauge_mqtt_main.py /home/maxigauge-mqtt/config.yaml
+ExecStart=/usr/bin/python3 /home/jasik/maxigauge-mqtt/maxigauge_mqtt_main.py /home/jasik/maxigauge-mqtt/config.yaml
 Restart=always
 
 [Install]
