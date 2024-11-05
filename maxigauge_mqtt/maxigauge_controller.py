@@ -143,6 +143,27 @@ class MaxigaugeController:
             return "Volt"
         else:
             return "Unknown Units"
+        
+    def read_channel_names(self):
+        """
+        Read the channel names from the instrument.
+        """
+        mnemonic = "CID"
+        if self.send_command(mnemonic):
+            response = self.request_data()
+            return self.decode_channel_names(response)
+        else:
+            return None
+        
+    def decode_channel_names(self, response):
+        """
+        Decode the channel names from the response.
+        """
+        response = response.strip()
+        logger.debug(f"Decoding channel names: {response}")
+
+        response = response.split(",")
+        return response
 
 
 if __name__ == "__main__":
@@ -155,11 +176,13 @@ if __name__ == "__main__":
 
     units = controller.read_units()
     print(f"Units: {units}")
+    
+    names = controller.read_channel_names()
 
     status, pressure = controller.read_pressures()
-    for ch, (s, p) in enumerate(zip(status, pressure)):
+    for ch, (n, s, p) in enumerate(zip(names, status, pressure)):
         print(
-            f"Ch: {ch} ... Status: {controller.decode_channel_status(s)}, Pressure: {p}"
+            f"Ch: {ch} ... Name: {n}, Status: {controller.decode_channel_status(s)}, Pressure: {p}"
         )
 
     controller.close()
