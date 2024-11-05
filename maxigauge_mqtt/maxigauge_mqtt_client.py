@@ -69,11 +69,11 @@ class MaxiGaugeMQTTClient:
                         f"Ch: {ch} ... Name: {n}, Status: {self.controller.decode_channel_status(s)}, Pressure: {p}"
                     )
                     self.client.publish(
-                        f"{self.topic_base}/{self.device_name}/status/{n}",
+                        f"{self.topic_base}/{self.device_name}/status/{ch}_{n}",
                         self.controller.decode_channel_status(s),
                     )
                     self.client.publish(
-                        f"{self.topic_base}/{self.device_name}/pressure/{n}", p
+                        f"{self.topic_base}/{self.device_name}/pressure/{ch}_{n}", p
                     )
 
                 # wait for the next interval
