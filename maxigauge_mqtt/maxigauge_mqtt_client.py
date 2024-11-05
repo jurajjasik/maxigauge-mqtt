@@ -61,17 +61,19 @@ class MaxiGaugeMQTTClient:
                     f"{self.topic_base}/{self.device_name}/units", units
                 )
 
+                names = self.controller.read_channel_names()
+
                 status, pressure = self.controller.read_pressures()
-                for ch, (s, p) in enumerate(zip(status, pressure)):
+                for ch, (n, s, p) in enumerate(zip(names, status, pressure)):
                     logger.debug(
-                        f"Ch: {ch} ... Status: {self.controller.decode_channel_status(s)}, Pressure: {p}"
+                        f"Ch: {ch} ... Name: {n}, Status: {self.controller.decode_channel_status(s)}, Pressure: {p}"
                     )
                     self.client.publish(
-                        f"{self.topic_base}/{self.device_name}/status/{ch}",
+                        f"{self.topic_base}/{self.device_name}/status/{n}",
                         self.controller.decode_channel_status(s),
                     )
                     self.client.publish(
-                        f"{self.topic_base}/{self.device_name}/pressure/{ch}", p
+                        f"{self.topic_base}/{self.device_name}/pressure/{n}", p
                     )
 
                 # wait for the next interval
