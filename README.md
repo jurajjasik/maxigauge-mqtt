@@ -38,10 +38,9 @@ interval: 1.0  # seconds
 
 The script publishes the following messages to the MQTT broker:
 
-- `<topic_base>/<device_name>/pressure/<channel>`: The pressure reading for the specified channel.
-- `<topic_base>/<device_name>/status`: The status of the Maxigauge.
-- `<topic_base>/<device_name>/status/<channel>`: The status of the specified channel.
-- `<topic_base>/<device_name>/units`: The units of the pressure readings.
+- `<topic_base>/<device_name>/status`: The status of the Maxigauge with json payload, e.g. `{"status": "ONLINE"}`
+
+- `<topic_base>/<device_name>/readbacks`: The readbacks of the Maxigauge with json payload, e.g. `{"units": "mbar", "sensors": [{"name": "FOREPUMP", "status": "No Sensor", "value": 0.0}, {"name": "CHAMBER_", "status": "No Sensor", "value": 0.0}, {"name": "________", "status": "No Sensor", "value": 0.0}, {"name": "________", "status": "No Sensor", "value": 0.0}, {"name": "________", "status": "No Sensor", "value": 0.0}, {"name": "________", "status": "No Sensor", "value": 0.0}]}`
 
 ## Installation of the maxigauge-mqtt service
 
