@@ -1,8 +1,9 @@
+import json
 import logging
+from threading import Event
 
 import paho.mqtt.client as mqtt
 import yaml
-from threading import Event
 
 from .maxigauge_controller import MaxigaugeController
 
@@ -10,6 +11,9 @@ logger = logging.getLogger(__name__)
 
 
 class MaxiGaugeMQTTClient:
+    STATUS_PAYLOAD_ONLINE = json.dumps({"value": "online"})
+    STATUS_PAYLOAD_OFFLINE = json.dumps({"value": "offline"})
+
     def __init__(self, config_file):
         self.config = self.load_config(config_file)
         self.topic_base = self.config["topic_base"]
@@ -22,7 +26,7 @@ class MaxiGaugeMQTTClient:
         # last will and testament
         self.client.will_set(
             f"{self.topic_base}/{self.device_name}/status",
-            "offline",
+            self.STATUS_PAYLOAD_OFFLINE,
             qos=1,
             retain=True,
         )
@@ -48,7 +52,7 @@ class MaxiGaugeMQTTClient:
             self.client.loop_start()
             self.client.publish(
                 f"{self.topic_base}/{self.device_name}/status",
-                "online",
+                self.STATUS_PAYLOAD_ONLINE,
                 qos=1,
                 retain=True,
             )
@@ -56,25 +60,32 @@ class MaxiGaugeMQTTClient:
             while True:
                 logger.debug("Reading data.")
                 units = self.controller.read_units()
-                logger.debug(f"Units: {units}")
-                self.client.publish(
-                    f"{self.topic_base}/{self.device_name}/units", units
-                )
-
                 names = self.controller.read_channel_names()
-
                 status, pressure = self.controller.read_pressures()
-                for ch, (n, s, p) in enumerate(zip(names, status, pressure)):
-                    logger.debug(
-                        f"Ch: {ch} ... Name: {n}, Status: {self.controller.decode_channel_status(s)}, Pressure: {p}"
-                    )
-                    self.client.publish(
-                        f"{self.topic_base}/{self.device_name}/status/{ch}_{n}",
-                        self.controller.decode_channel_status(s),
-                    )
-                    self.client.publish(
-                        f"{self.topic_base}/{self.device_name}/pressure/{ch}_{n}", p
-                    )
+
+                payload = {
+                    "units": units,
+                    "sensors": [
+                        {
+                            "name": n,
+                            "status": self.controller.decode_channel_status(s),
+                            "value": p,
+                        }
+                        for n, s, p in zip(names, status, pressure)
+                    ],
+                }
+
+                # convert payload to json
+                payload = json.dumps(payload)
+
+                logger.info(f"Publishing payload: {payload}")
+
+                # publish payload
+                self.client.publish(
+                    f"{self.topic_base}/{self.device_name}/readbacks",
+                    payload,
+                    qos=1,
+                )
 
                 # wait for the next interval
                 self.user_stop_event.wait(self.config["interval"])
@@ -84,7 +95,7 @@ class MaxiGaugeMQTTClient:
         finally:
             self.client.publish(
                 f"{self.topic_base}/{self.device_name}/status",
-                "offline",
+                self.STATUS_PAYLOAD_OFFLINE,
                 qos=1,
                 retain=True,
             )
