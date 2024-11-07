@@ -1,6 +1,6 @@
 # maxigauge-mqtt
 
-This is a simple python script that reads the data from a TPG 366 Maxigauge and publishes it to an MQTT broker.
+This is a simple python script that reads the data from a TPG 366 Maxigauge and publishes it to an MQTT broker. The script is designed to run as a service on a Raspberry Pi.
 
 ## Dependencies
 
@@ -31,7 +31,7 @@ interval: 1.0  # seconds
 - `mqtt_broker`: The hostname of the MQTT broker.
 - `mqtt_port`: The port of the MQTT broker.
 - `mqtt_connection_timeout`: The timeout for the MQTT connection.
-- `maxigauge_address`: The address of the Maxigauge.
+- `maxigauge_address`: The VISA address of the Maxigauge.
 - `interval`: The interval between readings.
 
 ## MQTT Message Structure
