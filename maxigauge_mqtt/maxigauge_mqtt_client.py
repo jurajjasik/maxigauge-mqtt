@@ -1,6 +1,7 @@
 import json
 import logging
 from threading import Event
+import time
 
 import paho.mqtt.client as mqtt
 import yaml
@@ -62,8 +63,10 @@ class MaxiGaugeMQTTClient:
                 units = self.controller.read_units()
                 names = self.controller.read_channel_names()
                 status, pressure = self.controller.read_pressures()
+                timestamp = time.time()
 
                 payload = {
+                    "timestamp": timestamp,
                     "units": units,
                     "sensors": [
                         {
