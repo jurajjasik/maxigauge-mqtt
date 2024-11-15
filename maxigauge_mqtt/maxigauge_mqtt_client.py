@@ -63,18 +63,19 @@ class MaxiGaugeMQTTClient:
                 units = self.controller.read_units()
                 names = self.controller.read_channel_names()
                 status, pressure = self.controller.read_pressures()
-                timestamp = time.time()
+                timestamp = round(time.time() * 1000)  # in milliseconds
 
                 payload = {
                     "timestamp": timestamp,
                     "units": units,
                     "sensors": [
                         {
+                            "channel": ch,
                             "name": n,
                             "status": self.controller.decode_channel_status(s),
                             "value": p,
                         }
-                        for n, s, p in zip(names, status, pressure)
+                        for ch, (n, s, p) in enumerate(zip(names, status, pressure))
                     ],
                 }
 
