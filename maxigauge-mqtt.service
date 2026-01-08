@@ -1,12 +1,11 @@
 [Unit]
-Description=maxigauge-mqtt Service
-After=multi-user.target
-
+Description=MaxiGauge MQTT Service
+After=network.target
 [Service]
-Type=idle
-User=jasik
-ExecStart=/usr/bin/python3 /home/jasik/maxigauge-mqtt/maxigauge_mqtt_main.py /home/jasik/maxigauge-mqtt/config.yaml
-Restart=always
-
+User=root
+Group=lqit
+WorkingDirectory=/opt/lqit/maxigauge-mqtt
+ExecStart=/opt/lqit/maxigauge-mqtt/venv/bin/python /opt/lqit/maxigauge-mqtt/maxigauge_mqtt.py --config /etc/lqit/maxigauge-mqtt.yaml
+Restart=on-failure
 [Install]
 WantedBy=multi-user.target
