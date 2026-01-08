@@ -1,0 +1,4 @@
+paho-mqtt
+PyVISA
+PyVISA-py
+PyYAML
