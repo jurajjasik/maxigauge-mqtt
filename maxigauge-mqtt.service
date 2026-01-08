@@ -5,7 +5,7 @@ After=network.target
 User=root
 Group=lqit
 WorkingDirectory=/opt/lqit/maxigauge-mqtt
-ExecStart=/opt/lqit/maxigauge-mqtt/venv/bin/python /opt/lqit/maxigauge-mqtt/maxigauge_mqtt.py --config /etc/lqit/maxigauge-mqtt.yaml
+ExecStart=/opt/lqit/maxigauge-mqtt/venv/bin/python /opt/lqit/maxigauge-mqtt/maxigauge_mqtt_main.py /etc/lqit/maxigauge-mqtt.yaml
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target
